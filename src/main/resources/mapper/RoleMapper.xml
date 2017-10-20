@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.restart1025.dao.RoleDao">
+
+    <resultMap id="roleMap" type="role">
+        <id property="id" column="id" />
+        <result property="roleSn" column="role_sn" />
+        <result property="roleName" column="role_name" />
+        <result property="deleted" column="deleted" />
+        <collection property="persons" fetchType="lazy" select="com.github.restart1025.dao.PersonDao.getPersonByRoleSn"
+                    column="{roleSn=role_sn}" />
+        <collection property="permissions" fetchType="lazy" select="com.github.restart1025.dao.PermissionDao.getPermissionByRoleSn"
+                    column="{roleSn=role_sn}" />
+    </resultMap>
+
+    <select id="getByRoleId" resultMap="roleMap" parameterType="Map">
+        SELECT r.*
+        FROM role r
+        WHERE r.role_sn = #{roleSn} AND r.deleted=0
+    </select>
+
+    <select id="getRoleByPersonId" parameterType="Map" resultMap="roleMap">
+        SELECT DISTINCT r.*
+        FROM role r LEFT JOIN person_role p ON r.role_sn=p.role_sn 
+        WHERE p.person_id = #{personId} AND r.deleted=0
+    </select>
+
+</mapper>

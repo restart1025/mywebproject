@@ -1,0 +1,62 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.8.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+group = 'com.github.restart1025'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	//redis
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+	//JSP
+	compile('org.apache.tomcat.embed:tomcat-embed-jasper')
+	//mybatis
+	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.1')
+	//spring-boot
+	compile('org.springframework.boot:spring-boot-starter-web')
+	//mybatis-HikariCP(JDBC)
+	compile('com.zaxxer:HikariCP:2.6.1')
+	//mapper plugin
+	compile('tk.mybatis:mapper:3.1.0')
+	//pagehelper plugin
+	compile('com.github.pagehelper:pagehelper:4.1.0')
+	//shiro plugin
+	compile('org.apache.shiro:shiro-core:1.3.2')
+	//shiro-spring plugin
+	compile('org.apache.shiro:shiro-spring:1.3.2')
+	//shiro-ehcache plugin
+	compile('org.apache.shiro:shiro-ehcache:1.3.2')
+	//fastjson
+	compile('com.alibaba:fastjson:1.2.35')
+	//UploadFile
+	compile('org.apache.commons:commons-io:1.3.2')
+    //Servlet
+    compile('javax.servlet:jstl')
+    //qi niu yun
+    compile('com.qiniu:qiniu-java-sdk:7.2.+')
+	runtime('mysql:mysql-connector-java')
+    compile('org.springframework.boot:spring-boot-starter-tomcat')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
