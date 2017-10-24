@@ -1,5 +1,6 @@
 package com.github.restart1025.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.entity.UploadFile;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface UploadFileSerivce {
      * @param map key:personId
      * @return
      */
-    List<UploadFile> queryUploadFilesByPersonId(Map<String, String> map);
+    JSONObject queryUploadFilesByPersonId(Map<String, Object> map);
 
     /**
      * 查找所有的文件

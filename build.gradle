@@ -56,6 +56,8 @@ dependencies {
     compile('javax.servlet:jstl')
     //qi niu yun
     compile('com.qiniu:qiniu-java-sdk:7.2.+')
+	//spring-boot-devtools
+	compile('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')
     compile('org.springframework.boot:spring-boot-starter-tomcat')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

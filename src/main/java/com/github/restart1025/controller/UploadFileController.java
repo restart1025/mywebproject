@@ -1,11 +1,15 @@
 package com.github.restart1025.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.github.restart1025.entity.Person;
 import com.github.restart1025.entity.UploadFile;
 import com.github.restart1025.service.PersonService;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/uploadData")
 public class UploadFileController {
 
     @Resource
@@ -33,7 +38,7 @@ public class UploadFileController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/upload/batch", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String batchUpload(HttpServletRequest request) {
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("files");
@@ -69,22 +74,25 @@ public class UploadFileController {
                     uploadFileSerivce.insert(uploadFile);
 
                     System.out.println(yunFileName);
-
+                    System.out.println("upload successful");
                 } catch (Exception e) {
                     stream = null;
                     System.out.println("You failed to upload " + i + " => " + e.getMessage());
                 } finally {
-                    if(saveFile.exists())
-                    {
-                        saveFile.delete();
-                    }
+//                    if(saveFile.exists())
+//                    {
+//                        saveFile.delete();
+//                    }
                 }
             } else {
                 System.out.println("You failed to upload " + i + " because the file was empty.");
             }
         }
-        System.out.println("upload successful");
         return "success";
     }
 
+    @RequestMapping(value = "/showData", method = RequestMethod.POST)
+    public JSONObject showData(@RequestBody Map<String, Object> map) {
+        return  uploadFileSerivce.queryUploadFilesByPersonId(map);
+    }
 }

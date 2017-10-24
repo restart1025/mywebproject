@@ -86,7 +86,7 @@ public class QiNiuYun {
     //生成UUID随机数，作为新的文件名
     private static String newFileName(String filename){
         String ext=getFileExt(filename);
-        return UUID.randomUUID().toString()+"."+ext;
+        return UUID.randomUUID().toString().replaceAll("-", "")+"."+ext;
     }
 
 }

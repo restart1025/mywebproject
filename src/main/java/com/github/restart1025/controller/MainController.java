@@ -19,12 +19,28 @@ public class MainController {
 
     /**
      * 转发JSP页面请求
-     * @param forName
      * @return
      */
-    @RequestMapping("/{forName}/{view}")
-    public String jspChildForword(@PathVariable String forName, @PathVariable String view) {
-        return forName + "/" +view;
+    @RequestMapping("/showFile/showFile")
+    public String showFile() {
+        return "showFile/showFile";
     }
+    /**
+     * 转发JSP页面请求
+     * @return
+     */
+    @RequestMapping("/uploadFile/uploadFile")
+    public String uploadFile() {
+        return "uploadFile/uploadFile";
+    }
+    /**
+     * 转发JSP页面请求
+     * @return
+     */
+    @RequestMapping("/index/pin_board")
+    public String index() {
+        return "index/pin_board";
+    }
+
 
 }

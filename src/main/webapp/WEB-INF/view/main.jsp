@@ -48,10 +48,22 @@
                     </div>
                 </li>
                 <li>
-                    <a class="J_menuItem" href="uploadFile/uploadFile"><i class="fa fa-columns"></i> <span class="nav-label">首页</span></a>
+                    <a class="J_menuItem" href="index/pin_board">
+                        <i class="fa fa-home"></i>
+                        <span class="nav-label">首页</span>
+                    </a>
                 </li>
                 <li>
-                    <a class="J_menuItem" href="uploadFile/uploadFile"><i class="fa fa-columns"></i> <span class="nav-label">文件上传</span></a>
+                    <a class="J_menuItem" href="uploadFile/uploadFile">
+                        <i class="fa fa-edit"></i>
+                        <span class="nav-label">文件上传</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="J_menuItem" href="showFile/showFile">
+                        <i class="fa fa-table"></i>
+                        <span class="nav-label">文件展示</span>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -75,7 +87,7 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="uploadFile/uploadFile">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="index/pin_board">首页</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -94,10 +106,10 @@
                     </li>
                 </ul>
             </div>
-            <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="main" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="uploadFile/uploadFile" frameborder="0" data-id="uploadFile/uploadFile" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="index/pin_board" frameborder="0" data-id="index/pin_board" seamless></iframe>
         </div>
         <div class="footer">
             <div class="pull-right">&copy; 2017-2018 <a href="javascript:if(confirm('%27https://github.com/restart1025%27 Do you want to open it from the server?%27'))window.location='https://github.com/restart1025'" target="_blank">restart1025's github</a>

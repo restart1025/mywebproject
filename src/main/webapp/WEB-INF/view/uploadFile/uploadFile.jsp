@@ -21,7 +21,6 @@
         </form>
     </div>
 
-
     <!-- if using RTL (Right-To-Left) orientation, load the RTL CSS file after fileinput.css by uncommenting below -->
     <!-- link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput-rtl.min.css" media="all" rel="stylesheet" type="text/css" /-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -40,11 +39,14 @@
     <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.5/js/locales/zh.min.js"></script>
     <script type="text/javascript">
         $("#file-5").fileinput({
-            uploadUrl: '${pageContext.request.contextPath}/upload/batch',
+            uploadUrl: '${pageContext.request.contextPath}/uploadData/upload',
             showUpload:true,
             language: 'zh',
             previewFileType:'any',
             uploadExtraData: {}
+        }).on("fileuploaded", function(event, data) {
+            console.log('event' + event);
+            console.log('data' + data);
         });
     </script>
 </body>

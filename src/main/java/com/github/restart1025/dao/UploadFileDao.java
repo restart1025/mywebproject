@@ -12,7 +12,7 @@ public interface UploadFileDao extends MyMapper<UploadFile> {
      * @param map key:personId
      * @return
      */
-    List<UploadFile> queryUploadFilesByPersonId(Map<String, String> map);
+    List<UploadFile> queryUploadFilesByPersonId(Map<String, Object> map);
 
     /**
      * 查找所有的文件

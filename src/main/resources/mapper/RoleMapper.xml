@@ -8,8 +8,8 @@
         <result property="roleSn" column="role_sn" />
         <result property="roleName" column="role_name" />
         <result property="deleted" column="deleted" />
-        <collection property="persons" fetchType="lazy" select="com.github.restart1025.dao.PersonDao.getPersonByRoleSn"
-                    column="{roleSn=role_sn}" />
+        <!--<collection property="persons" fetchType="lazy" select="com.github.restart1025.dao.PersonDao.getPersonByRoleSn"-->
+                    <!--column="{roleSn=role_sn}" />-->
         <collection property="permissions" fetchType="lazy" select="com.github.restart1025.dao.PermissionDao.getPermissionByRoleSn"
                     column="{roleSn=role_sn}" />
     </resultMap>
