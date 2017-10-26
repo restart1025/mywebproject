@@ -2,6 +2,7 @@ package com.github.restart1025.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.entity.UploadFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,16 @@ public interface UploadFileSerivce {
 
     /**
      * 插入文件数据
-     * @param uploadFile
+     * @param map
      */
-    void insert(UploadFile uploadFile);
+    void insert(Map<String, Object> map);
+
+    /**
+     * 多文件上传
+     * @param files 上传文件列表
+     * @param personId 人员编号
+     * @param savePath 保存文件到临时目录
+     * @return
+     */
+    Map<String, Object> batchUpload(List<MultipartFile> files, String personId, String savePath);
 }

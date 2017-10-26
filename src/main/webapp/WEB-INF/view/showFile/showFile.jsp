@@ -59,7 +59,7 @@
                     title: '文件名称',
                     align: 'center',
                     formatter: function(value, row){
-                        return "<a onclick=selectSection('" + row.filePath + "')>" + row.fileName + "</a>";
+                        return "<a onclick=selectSection('" + row.filePath + "','" + row.fileName + "')>" + row.fileName + "</a>";
                     }
                 }, {
                     field: 'fileType',
@@ -73,8 +73,20 @@
                 }]
             });
         });
-        function selectSection(event){
-            alert("功能开发中, 请耐心等待");
+        function selectSection(filePath, fileName){
+//            alert("功能开发中, 请耐心等待");
+            var url ='${pageContext.request.contextPath}/uploadData/download.action';
+            var input1=$("<input>");
+            input1.attr("type", "hidden");
+            input1.attr("name", "filePath");
+            input1.attr("value", filePath);
+
+
+            var input2=$("<input>");
+            input2.attr("type", "hidden");
+            input2.attr("name", "fileName");
+            input2.attr("value", fileName);
+            $('<form method="post" action="' + url + '"></form>').append(input1).append(input2).appendTo('body').submit().remove();
         };
     </script>
 </head>

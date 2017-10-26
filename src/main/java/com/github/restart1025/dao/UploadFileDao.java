@@ -20,5 +20,9 @@ public interface UploadFileDao extends MyMapper<UploadFile> {
      */
     List<UploadFile> findAll();
 
-    void insertUploadFile(UploadFile uploadFile);
+    /**
+     * 插入文件信息
+     * @param map
+     */
+    void insertUploadFile(Map<String, Object> map);
 }

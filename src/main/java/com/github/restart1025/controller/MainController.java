@@ -7,6 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MainController {
 
+
+    /**
+     * 转发JSP页面请求
+     * @return
+     */
+    @RequestMapping("/")
+    public String main() {
+        return "main";
+    }
     /**
      * 转发JSP页面请求
      * @param forName
@@ -18,7 +27,7 @@ public class MainController {
     }
 
     /**
-     * 转发JSP页面请求
+     * 转发展示文件页面请求
      * @return
      */
     @RequestMapping("/showFile/showFile")
@@ -26,7 +35,7 @@ public class MainController {
         return "showFile/showFile";
     }
     /**
-     * 转发JSP页面请求
+     * 转发上传文件页面请求
      * @return
      */
     @RequestMapping("/uploadFile/uploadFile")
@@ -34,7 +43,7 @@ public class MainController {
         return "uploadFile/uploadFile";
     }
     /**
-     * 转发JSP页面请求
+     * 转发主页页面请求
      * @return
      */
     @RequestMapping("/index/pin_board")

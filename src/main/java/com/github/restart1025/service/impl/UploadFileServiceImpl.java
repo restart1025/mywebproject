@@ -5,12 +5,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.restart1025.dao.UploadFileDao;
+import com.github.restart1025.entity.Person;
 import com.github.restart1025.entity.UploadFile;
 import com.github.restart1025.service.UploadFileSerivce;
+import com.github.restart1025.util.QiNiuYun;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +73,67 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
     }
 
     @Override
-    public void insert(UploadFile uploadFile) {
-        uploadFileDao.insertUploadFile(uploadFile);
+    public void insert(Map<String, Object> map) {
+        uploadFileDao.insertUploadFile(map);
+    }
+
+    @Override
+    public Map<String, Object> batchUpload(List<MultipartFile> files, String personId, String savePath) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        File saveFile = null;//上传文件流转化为File
+        Map<String, Object> map = null;//文件保存参数
+
+        for (MultipartFile file : files)
+        {
+            if (!file.isEmpty())
+            {
+                try {
+
+                    //文件保存到本地
+                    saveFile = new File(savePath + file.getOriginalFilename());
+                    file.transferTo(saveFile);
+
+                    //上传后返回文件编号
+                    String yunFileName = QiNiuYun.upload(saveFile, QiNiuYun.FILE);
+
+                    map = new HashMap<String, Object>();
+                    map.put("fileName", QiNiuYun.getFileName(saveFile.getName()));
+                    map.put("filePath", QiNiuYun.FILEDOWNLOAD + yunFileName);
+                    map.put("fileSn", yunFileName);
+                    map.put("fileType", QiNiuYun.FILE);
+                    map.put("uploadTime", LocalDateTime.now());
+                    map.put("uploader", personId);
+                    this.insert(map);
+
+                    System.out.println("upload successful fileName=" + yunFileName);
+                    result.put("result", true);
+
+                } catch (Exception e) {
+
+                    System.out.println("You failed to upload " + file.getName() + " because error.");
+                    result.put("result", false);
+                    result.put("errorCode", 1);
+                    result.put("errorMsg", "上传出错");
+                    break;
+
+                } finally {
+
+//                    if(saveFile.exists())
+//                    {
+//                        saveFile.delete();
+//                    }
+
+                }
+            } else {
+                System.out.println("You failed to upload " + file.getName() + " because the file was empty.");
+                result.put("result", false);
+                result.put("emptyCode", 1);
+                result.put("emptyMsg", "上传文件为空");
+                break;
+            }
+        }
+        return result;
     }
 }

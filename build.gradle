@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
+//apply from: 'gretty.plugin'
 
 group = 'com.github.restart1025'
 version = '0.0.1-SNAPSHOT'
@@ -30,8 +31,6 @@ configurations {
 dependencies {
 	//redis
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
-	//JSP
-	compile('org.apache.tomcat.embed:tomcat-embed-jasper')
 	//mybatis
 	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.1')
 	//spring-boot
@@ -52,13 +51,16 @@ dependencies {
 	compile('com.alibaba:fastjson:1.2.35')
 	//UploadFile
 	compile('org.apache.commons:commons-io:1.3.2')
-    //Servlet
-    compile('javax.servlet:jstl')
     //qi niu yun
     compile('com.qiniu:qiniu-java-sdk:7.2.+')
 	//spring-boot-devtools
 	compile('org.springframework.boot:spring-boot-devtools')
+    //JSP
+    compile('org.apache.tomcat.embed:tomcat-embed-jasper')//providedCompile
+    //Servlet
+    compile('javax.servlet:jstl')//providedCompile
+    //tomcat
+    compile('org.springframework.boot:spring-boot-starter-tomcat')//providedCompile
 	runtime('mysql:mysql-connector-java')
-    compile('org.springframework.boot:spring-boot-starter-tomcat')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

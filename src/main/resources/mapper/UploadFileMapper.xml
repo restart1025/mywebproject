@@ -19,6 +19,7 @@
         SELECT u.*
         FROM upload_file u
         WHERE u.deleted=0 AND u.person_id=#{personId}
+        ORDER BY u.upload_time DESC
     </select>
 
     <select id="findAll" resultMap="uploadFileMap" parameterType="Map">
@@ -27,9 +28,9 @@
         GROUP BY u.person_id
     </select>
 
-    <insert id="insertUploadFile" parameterType="uploadFile">
+    <insert id="insertUploadFile" parameterType="map">
         INSERT INTO upload_file(file_sn, file_name, file_type, file_path, person_id, upload_time)
-        VALUES (#{fileSn}, #{fileName}, #{fileType}, #{filePath}, 'restart1025', #{uploadTime})
+        VALUES (#{fileSn}, #{fileName}, #{fileType}, #{filePath},  #{uploader}, #{uploadTime})
     </insert>
 
 </mapper>
