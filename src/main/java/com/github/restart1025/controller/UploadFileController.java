@@ -3,6 +3,8 @@ package com.github.restart1025.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,12 +16,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/uploadData")
 public class UploadFileController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private UploadFileSerivce uploadFileSerivce;
@@ -50,30 +55,35 @@ public class UploadFileController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void testDownload(HttpServletResponse res, String filePath,
-                             String fileName) {
+                             String fileName) throws UnsupportedEncodingException {
 
-        System.out.println("filePath" + filePath);
-        System.out.println("fileName" + fileName);
+        logger.info("filePath : " + filePath);
+        logger.info("fileName : " + fileName);
 
-        fileName = fileName + this.getFileExtByFileName(filePath);
+        fileName = URLEncoder.encode(fileName + this.getFileExtByFileName(filePath),"UTF-8");
 
-        System.out.println("fileName after" + fileName);
+        logger.info("fileName after : " + fileName);
+        //设置响应头和客户端保存文件名
+        res.setCharacterEncoding("utf-8");
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
         res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
         byte[] buff = new byte[1024];
-        BufferedInputStream bis = null;
-        OutputStream os = null;
+        InputStream bis = null;
+        OutputStream os;
         try {
             os = res.getOutputStream();
 //            bis = new BufferedInputStream(new FileInputStream(new File("D:\\testLog\\"
 //                    + fileName)));
-            bis = new BufferedInputStream(QiNiuYun.download(filePath));
-            int i = bis.read(buff);
-            while (i != -1) {
-                os.write(buff, 0, buff.length);
-                os.flush();
-                i = bis.read(buff);
+            bis = QiNiuYun.download(filePath);
+            if( bis != null )
+            {
+                int i = bis.read(buff);
+                while (i != -1) {
+                    os.write(buff, 0, buff.length);
+                    os.flush();
+                    i = bis.read(buff);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,7 +96,6 @@ public class UploadFileController {
                 }
             }
         }
-        System.out.println("success");
     }
 
     /**

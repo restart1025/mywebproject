@@ -56,11 +56,11 @@ dependencies {
 	//spring-boot-devtools
 	compile('org.springframework.boot:spring-boot-devtools')
     //JSP
-    compile('org.apache.tomcat.embed:tomcat-embed-jasper')//providedCompile
+	compile('org.apache.tomcat.embed:tomcat-embed-jasper')//providedCompile
     //Servlet
-    compile('javax.servlet:jstl')//providedCompile
+	compile('javax.servlet:jstl')//providedCompile
     //tomcat
-    compile('org.springframework.boot:spring-boot-starter-tomcat')//providedCompile
+	compile('org.springframework.boot:spring-boot-starter-tomcat')//providedCompile
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

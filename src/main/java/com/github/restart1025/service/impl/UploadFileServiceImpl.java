@@ -10,6 +10,8 @@ import com.github.restart1025.entity.UploadFile;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
 import org.apache.commons.collections.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @Service("uploadFileService")
 public class UploadFileServiceImpl implements UploadFileSerivce {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private UploadFileDao uploadFileDao;
@@ -107,12 +111,12 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
                     map.put("uploader", personId);
                     this.insert(map);
 
-                    System.out.println("upload successful fileName=" + yunFileName);
+                    logger.debug("upload successful fileName=" + yunFileName);
                     result.put("result", true);
 
                 } catch (Exception e) {
 
-                    System.out.println("You failed to upload " + file.getName() + " because error.");
+                    logger.error("You failed to upload " + file.getName() + " because error.");
                     result.put("result", false);
                     result.put("errorCode", 1);
                     result.put("errorMsg", "上传出错");
@@ -127,7 +131,7 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
 
                 }
             } else {
-                System.out.println("You failed to upload " + file.getName() + " because the file was empty.");
+                logger.debug("You failed to upload " + file.getName() + " because the file was empty.");
                 result.put("result", false);
                 result.put("emptyCode", 1);
                 result.put("emptyMsg", "上传文件为空");
