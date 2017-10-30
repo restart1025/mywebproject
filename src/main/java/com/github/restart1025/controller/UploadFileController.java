@@ -3,8 +3,11 @@ package com.github.restart1025.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
+import org.apache.commons.collections.MapUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/uploadData")
 public class UploadFileController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static Logger logger = LoggerFactory.getLogger(UploadFileController.class);
 
     @Resource
     private UploadFileSerivce uploadFileSerivce;
@@ -35,6 +38,7 @@ public class UploadFileController {
      * @return
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    //@RequiresPermissions("user:query")//权限管理;
     public Map<String, Object> batchUpload(HttpServletRequest request) {
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("files");
@@ -48,11 +52,63 @@ public class UploadFileController {
         return map;
     }
 
+    /**
+     * 文件展示
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/showData", method = RequestMethod.POST)
     public JSONObject showData(@RequestBody Map<String, Object> map) {
+        String personId = (String) SecurityUtils.getSubject().getPrincipal();
+
+        // 暂时设置personId为空时, 给定一个默认值, 以后会取消
+        logger.debug(" login personId is : " + personId);
+        if(StringUtils.isEmpty(personId))
+            personId = "restart1025";
+
+        map.put("personId", personId);
         return  uploadFileSerivce.queryUploadFilesByPersonId(map);
     }
 
+    /**
+     * 删除文件
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/deleteFile", method = RequestMethod.POST)
+    public JSONObject deleteFile(@RequestBody Map<String, Object> map) {
+        JSONObject jo = new JSONObject();
+        jo.put("result", false);
+        try {
+            if(MapUtils.getString(map, "fileSn") != null)
+            {
+                String personId = (String) SecurityUtils.getSubject().getPrincipal();
+                if(personId != null)
+                {
+                    if(personId.equals(MapUtils.getString(map, "uploader")))
+                    {
+                        map.put("personId", personId);
+                        uploadFileSerivce.deleteFile(map);
+                        jo.put("result", true);
+                    } else {
+                        jo.put("msg", "只能删除自己上传的文件!");
+                    }
+                } else {
+                    jo.put("msg", "登录超时, 请重新登录!");
+                }
+            }
+        } catch (Exception e) {
+            jo.put("msg", "程序异常, 请刷新页面后重试!");
+        }
+        return jo;
+    }
+    /**
+     * 文件下载
+     * @param res
+     * @param filePath
+     * @param fileName
+     * @throws UnsupportedEncodingException
+     */
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void testDownload(HttpServletResponse res, String filePath,
                              String fileName) throws UnsupportedEncodingException {

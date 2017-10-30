@@ -1677,7 +1677,7 @@
             _removeSources();
 
             // If a single source is passed
-            // .source('../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.mp4*/)
+            // .source('bootstrapHplus/error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.mp4*/)
             if (typeof sources === 'string') {
                 _addSource({
                     src: sources
@@ -1686,7 +1686,7 @@
 
             // An array of source objects
             // Check if a source exists, use that or set the 'src' attribute?
-            // .source([{ src: '../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.mp4*/, type: 'video/mp4' },{ src: '../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.webm*/, type: 'video/webm' }])
+            // .source([{ src: 'bootstrapHplus/error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.mp4*/, type: 'video/mp4' },{ src: '../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/plyr/path/to/video.webm*/, type: 'video/webm' }])
             else if (sources.constructor === Array) {
                 for (var index in sources) {
                     _addSource(sources[index]);

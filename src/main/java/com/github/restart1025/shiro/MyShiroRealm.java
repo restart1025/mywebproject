@@ -1,12 +1,15 @@
 package com.github.restart1025.shiro;
 
+import com.github.restart1025.entity.Permission;
 import com.github.restart1025.entity.Person;
 import com.github.restart1025.entity.Role;
 import com.github.restart1025.service.PersonService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 //import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 //import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import java.util.*;
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -52,22 +56,23 @@ public class MyShiroRealm extends AuthorizingRealm {
             //4、权限信息对象Info,用来存放查出的用户的所有角色及权限
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-            //5、用户的角色集合放入Shiro中
             List<Role> roleList = person.getRoles();
-            Set<String> set = new HashSet<String>(roleList.size());
+            //5、用户的角色集合放入Shiro中
+            Set<String> roles = new HashSet<String>(roleList.size());
+            //6、用户的角色对应的所有权限
+            Set<String> permissoins = new HashSet<String>();
             for( Role role : roleList )
             {
-                set.add(role.getRoleSn());
+                roles.add(role.getRoleSn());
+                for(Permission permission : role.getPermissions())
+                {
+                    permissoins.add(permission.getPermissionSn());
+                }
             }
-            info.setRoles(set);
+            info.setRoles(roles);
+            info.addStringPermissions(permissoins);
 
             //6、用户的角色对应的所有权限，如果只使用角色定义访问权限，下面的四行可以不要
-            set = new HashSet<String>();
-            for( Role role : roleList )
-            {
-//                set.add(role.getPermissions())
-//                info.addStringPermissions(role.getPermissionsName());
-            }
             //或者自己手动添加
             //添加一个角色,不是配置意义上的添加,而是证明该用户拥有admin角色
 //            simpleAuthorInfo.addRole("admin");
@@ -87,12 +92,18 @@ public class MyShiroRealm extends AuthorizingRealm {
         //UsernamePasswordToken对象用来存放提交的登录信息
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 
-        //logger.info("验证当前Subject时获取到token为：" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
+//        logger.info("验证当前Subject时获取到token为：" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
 
         //查出是否有此用户
-        Person person = personService.getPersonByPersonId((Map<String, Object>) new HashMap<>().put("personId", token.getUsername()));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("personId", token.getUsername());
+        Person person = personService.getPersonByPersonId(map);
         if( person != null )
         {
+            //将用户名和personId放入session中
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setAttribute("username", person.getUsername());
+            session.setAttribute("personId", person.getPersonId());
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
             return new SimpleAuthenticationInfo(person.getPersonId(), person.getPassword(), getName());
         }

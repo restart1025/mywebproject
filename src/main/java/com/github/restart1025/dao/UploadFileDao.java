@@ -21,6 +21,12 @@ public interface UploadFileDao extends MyMapper<UploadFile> {
     List<UploadFile> findAll();
 
     /**
+     * 删除文件 ( 根据文件名和上传人 )
+     * @param map fileSn, personId
+     */
+    void deleteFile(Map<String, Object> map);
+
+    /**
      * 插入文件信息
      * @param map
      */

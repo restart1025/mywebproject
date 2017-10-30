@@ -7,6 +7,8 @@ import org.apache.shiro.web.filter.mgt.FilterChainResolver;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 
 import javax.servlet.FilterChain;
@@ -24,6 +26,8 @@ import java.util.Set;
  */
 public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
+    private static Logger logger = LoggerFactory.getLogger(MShiroFilterFactoryBean.class);
+
     // 对ShiroFilter来说，需要直接忽略的请求
     private Set<String> ignoreExt;
 
@@ -36,6 +40,9 @@ public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         ignoreExt.add(".bmp");
         ignoreExt.add(".js");
         ignoreExt.add(".css");
+        ignoreExt.add(".woff");
+        ignoreExt.add(".ttf");
+        ignoreExt.add(".ico");
     }
 
     @Override
@@ -64,11 +71,13 @@ public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
         protected MSpringShiroFilter(WebSecurityManager webSecurityManager, FilterChainResolver resolver) {
             super();
-            if (webSecurityManager == null) {
+            if (webSecurityManager == null)
+            {
                 throw new IllegalArgumentException("WebSecurityManager property cannot be null.");
             }
             setSecurityManager(webSecurityManager);
-            if (resolver != null) {
+            if (resolver != null)
+            {
                 setFilterChainResolver(resolver);
             }
         }
@@ -76,26 +85,33 @@ public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         @Override
         protected void doFilterInternal(ServletRequest servletRequest, ServletResponse servletResponse,
                                         FilterChain chain) throws ServletException, IOException {
-            HttpServletRequest request = (HttpServletRequest)servletRequest;
-            String str = request.getRequestURI().toLowerCase();
-            // 因为ShiroFilter 拦截所有请求
-            // （在上面我们配置了urlPattern 为 * ，当然你也可以在那里精确的添加要处理的路径，这样就不需要这个类了），
-            // 而在每次请求里面都做了session的读取和更新访问时间等操作，
-            // 这样在集群部署session共享的情况下，数量级的加大了处理量负载。
 
-            // 所以我们这里将一些能忽略的请求忽略掉。
-            // 当然如果你的集群系统使用了动静分离处理，静态资料的请求不会到Filter这个层面，便可以忽略。
-            boolean flag = true;
-            int idx = 0;
-            if(( idx = str.indexOf(".")) > 0){
-                str = str.substring(idx);
-                if(ignoreExt.contains(str.toLowerCase()))
-                    flag = false;
-            }
-            if(flag){
-                super.doFilterInternal(servletRequest, servletResponse, chain);
-            }else{
-                chain.doFilter(servletRequest, servletResponse);
+            try {
+                HttpServletRequest request = (HttpServletRequest)servletRequest;
+                String str = request.getRequestURI().toLowerCase();
+                // 因为ShiroFilter 拦截所有请求
+                // ( 在上面我们配置了urlPattern 为 * ，当然你也可以在那里精确的添加要处理的路径，这样就不需要这个类了 )，
+                // 而在每次请求里面都做了session的读取和更新访问时间等操作，
+                // 这样在集群部署session共享的情况下, 数量级的加大了处理量负载.
+
+                // 所以我们这里将一些能忽略的请求忽略掉。
+                // 当然如果你的集群系统使用了动静分离处理，静态资料的请求不会到Filter这个层面，便可以忽略。
+                boolean flag = true;
+                int idx = 0;
+                if (( idx = str.lastIndexOf(".")) > 0)
+                {
+                    str = str.substring(idx);
+                    if(ignoreExt.contains(str.toLowerCase()))
+                        flag = false;
+                }
+                if (flag)
+                {
+                    super.doFilterInternal(servletRequest, servletResponse, chain);
+                } else {
+                    chain.doFilter(servletRequest, servletResponse);
+                }
+            } catch (Exception e) {
+                logger.error("filter error, this error msg is : " + e.toString());
             }
         }
 

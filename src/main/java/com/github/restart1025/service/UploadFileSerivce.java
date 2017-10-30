@@ -28,6 +28,12 @@ public interface UploadFileSerivce {
     void insert(Map<String, Object> map);
 
     /**
+     * 删除文件 ( 根据文件名和上传人 )
+     * @param map fileSn, personId
+     */
+    void deleteFile(Map<String, Object> map);
+
+    /**
      * 多文件上传
      * @param files 上传文件列表
      * @param personId 人员编号

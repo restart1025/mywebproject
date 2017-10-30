@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.restart1025.dao.UploadFileDao;
-import com.github.restart1025.entity.Person;
 import com.github.restart1025.entity.UploadFile;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
@@ -25,7 +24,8 @@ import java.util.Map;
 @Service("uploadFileService")
 public class UploadFileServiceImpl implements UploadFileSerivce {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static Logger logger = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 
     @Resource
     private UploadFileDao uploadFileDao;
@@ -79,6 +79,11 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
     @Override
     public void insert(Map<String, Object> map) {
         uploadFileDao.insertUploadFile(map);
+    }
+
+    @Override
+    public void deleteFile(Map<String, Object> map) {
+        uploadFileDao.deleteFile(map);
     }
 
     @Override

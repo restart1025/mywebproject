@@ -13,7 +13,7 @@
  *
  * @example $.Cookie('the_cookie', 'the_value');
  * @desc Set the value of a Cookie.
- * @example $.Cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: '../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/plugins/fullavatareditor/scripts/jquery.com*/, secure: true });
+ * @example $.Cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: 'bootstrapHplus/error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/plugins/fullavatareditor/scripts/jquery.com*/, secure: true });
  * @desc Create a Cookie with all available options.
  * @example $.Cookie('the_cookie', 'the_value');
  * @desc Create a session Cookie.

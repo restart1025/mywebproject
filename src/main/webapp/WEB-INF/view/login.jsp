@@ -60,7 +60,7 @@
             <label class="control-label visible-ie8 visible-ie9">账号</label>
             <div class="input-icon">
                 <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="账号" name="username"/>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="账号" name="personId"/>
             </div>
         </div>
         <div class="form-group">
@@ -398,7 +398,7 @@
             <label class="control-label visible-ie8 visible-ie9">账号</label>
             <div class="input-icon">
                 <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="请输入账号" name="username"/>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="请输入账号" name="personId"/>
             </div>
         </div>
         <div class="form-group">

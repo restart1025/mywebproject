@@ -31,7 +31,11 @@
                     <div>
                         <small>2017年10月25日(星期三) 下午5:31</small>
                         <h4>我的网站</h4>
-                        <p>哈哈哈哈哈, 终于成功了</p>
+                        <p>
+                            哈哈哈哈哈, 终于成功了<br/>
+                            采用SpringBoot-MyBatis-jsp框架<br/>
+                            Shiro权限控制
+                        </p>
                         <a href="#"><i class="fa fa-trash-o "></i></a>
                     </div>
                 </li>
@@ -47,7 +51,10 @@
                     <div>
                         <small>2017年10月25日(星期三) 下午5:31</small>
                         <h4>文件上传</h4>
-                        <p>可拖拉文件上传</p>
+                        <p>
+                            可拖拉文件上传<br/>
+                            采用BootStrap-fileInput控件
+                        </p>
                         <a href="#"><i class="fa fa-trash-o "></i></a>
                     </div>
                 </li>
@@ -55,7 +62,10 @@
                     <div>
                         <small>2017年10月25日(星期三) 下午5:31</small>
                         <h4>文件下载</h4>
-                        <p>展示所上传的文件, 并且提供下载功能</p>
+                        <p>
+                            展示所上传的文件, 并且提供下载功能<br/>
+                            采用BootStrapTables控件展示文件
+                        </p>
                         <a href="#"><i class="fa fa-trash-o "></i></a>
                     </div>
                 </li>
@@ -63,7 +73,7 @@
                     <div>
                         <small>2017年10月25日(星期三) 下午5:31</small>
                         <h4>功能简单</h4>
-                        <p>因为时间仓促, 所以功能简单, 但是文件上传下载方便很多, 不用登陆, 直接上传下载, 省去很多麻烦</p>
+                        <p>因为时间仓促, 所以功能简单, 但是文件上传下载方便很多, 直接上传下载, 省去很多麻烦</p>
                         <a href="#"><i class="fa fa-trash-o "></i></a>
                     </div>
                 </li>

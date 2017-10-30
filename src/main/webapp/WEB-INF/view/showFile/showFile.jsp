@@ -28,13 +28,15 @@
             $('#table').bootstrapTable({
                 url:"${pageContext.request.contextPath}/uploadData/showData.action",
                 method:'post',
-                contentType:'application/json',
+//                contentType:'application/json',
                 idField:'fileSn',
                 uniqueId:'fileSn',
-                queryParams:function(params) {
-                    params['personId']='restart1025';
-                    return params;
-                },
+//                queryParams:function(params) {
+//                    params['personId']='restart1025';
+//                    return params;
+//                },
+                search:true,//是否启用搜索框
+                searchOnEnterKey:true,//按回车触发搜索方法
                 striped:true,		//隔行变色
                 singleSelect:true,	//禁止多选
                 clickToSelect:true,	//点击行时，自动选择
@@ -42,7 +44,7 @@
                 undefinedText:"无",	//数据为undefined时显示的字符
                 showRefresh:true,	//刷新按钮
                 pagination:true,	//显示分页条
-                onlyInfoPagination:true,//仅显示总数据数
+                //onlyInfoPagination:true,//仅显示总数据数
                 sidePagination:'server',//在哪里进行分页
                 showPaginationSwitch:true,//数据条数选择框
                 pageNumber:1,			//首页页码
@@ -58,7 +60,7 @@
                     field: 'fileName',
                     title: '文件名称',
                     align: 'center',
-                    formatter: function(value, row){
+                    formatter: function(value, row) {
                         return "<a onclick=selectSection('" + row.filePath + "','" + row.fileName + "')>" + row.fileName + "</a>";
                     }
                 }, {
@@ -70,9 +72,22 @@
                 }, {
                     field: 'uploadTime',
                     title: '上传时间'
+                }, {
+                    field: 'deleted',
+                    title: '上传时间',
+                    align: 'center',
+                    formatter: function(value, row) {
+                        return "<a onclick=deleteFileFun('" + row.fileSn + "','" + row.uploader + "')>删除</a>";
+                    }
                 }]
             });
         });
+
+        /**
+         * 下载文件
+         * @param filePath
+         * @param fileName
+         */
         function selectSection(filePath, fileName){
 //            alert("功能开发中, 请耐心等待");
             var url ='${pageContext.request.contextPath}/uploadData/download.action';
@@ -87,6 +102,23 @@
             input2.attr("name", "fileName");
             input2.attr("value", fileName);
             $('<form method="post" action="' + url + '"></form>').append(input1).append(input2).appendTo('body').submit().remove();
+        };
+
+        /**
+         * 逻辑删除文件
+         * @param event
+         */
+        function deleteFileFun(fileSn, uploader) {
+            $.ajax({
+                url:'${pageContext.request.contextPath}/uploadData/deleteFile.action',
+                type:'post',
+                data:{fileSn:fileSn, uploader:uploader},
+                dataType:'json',
+                success: function(data){
+                    console.log(data);
+                    $('#table').bootstrapTable('refresh');
+                }
+            },"json");
         };
     </script>
 </head>

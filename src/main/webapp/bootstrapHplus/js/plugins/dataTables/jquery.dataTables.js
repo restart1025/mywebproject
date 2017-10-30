@@ -9651,7 +9651,7 @@
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
 		 *        "serverSide": true,
-		 *        "ajax": "../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.php*/
+		 *        "ajax": "bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.php*/
 		 *      } );
 		 *    } );
 		 */
@@ -10283,7 +10283,7 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "serverSide": true,
-		 *        "ajax": "../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/scripts/server_processing.php*/,
+		 *        "ajax": "bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/scripts/server_processing.php*/,
 		 *        "deferLoading": 57
 		 *      } );
 		 *    } );
@@ -11423,7 +11423,7 @@
 		 *    //   }
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "ajaxSource": "../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/sources/objects.txt*/,
+		 *        "ajaxSource": "bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/sources/objects.txt*/,
 		 *        "columns": [
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
@@ -11575,7 +11575,7 @@
 		 *    // Create a comma separated list from an array of objects
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "ajaxSource": "../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/sources/deep.txt*/,
+		 *        "ajaxSource": "bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/sources/deep.txt*/,
 		 *        "columns": [
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
@@ -13947,13 +13947,13 @@
 	 *
 	 *  @example
 	 *     // Use a custom property returned from the server in another DOM element
-	 *     $('#table').dataTable().on('../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.dt*/, function (e, settings, json) {
+	 *     $('#table').dataTable().on('bootstrapHplus/error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.dt*/, function (e, settings, json) {
 	 *       $('#status').html( json.status );
 	 *     } );
 	 *
 	 *  @example
 	 *     // Pre-process the data returned from the server
-	 *     $('#table').dataTable().on('../../../../../error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.dt*/, function (e, settings, json) {
+	 *     $('#table').dataTable().on('bootstrapHplus/error/ie.html'/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dataTables/xhr.dt*/, function (e, settings, json) {
 	 *       for ( var i=0, ien=json.aaData.length ; i<ien ; i++ ) {
 	 *         json.aaData[i].sum = json.aaData[i].one + json.aaData[i].two;
 	 *       }

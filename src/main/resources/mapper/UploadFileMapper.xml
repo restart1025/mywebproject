@@ -22,6 +22,11 @@
         ORDER BY u.upload_time DESC
     </select>
 
+    <update id="deleteFile" parameterType="map">
+        UPDATE upload_file SET deleted=1
+        WHERE file_sn=#{fileSn} AND person_id=#{personId}
+    </update>
+
     <select id="findAll" resultMap="uploadFileMap" parameterType="Map">
         SELECT u.*
         FROM upload_file u

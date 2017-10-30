@@ -229,11 +229,11 @@
         /**
          * Exposing dropzone
          */
-        module.exports = require("../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dropzone/dropzone/lib/dropzone.js*/);
+        module.exports = require("bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dropzone/dropzone/lib/dropzone.js*/);
 
     });
 
-    require.register("../../../../../error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dropzone/dropzone/lib/dropzone.js*/, function (exports, module) {
+    require.register("bootstrapHplus/error/ie.html"/*tpa=http://www.zi-han.net/theme/hplus/js/plugins/dropzone/dropzone/lib/dropzone.js*/, function (exports, module) {
 
         /*
          *

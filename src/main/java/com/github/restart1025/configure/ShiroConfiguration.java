@@ -91,6 +91,32 @@ public class ShiroConfiguration {
     }
 
     /**
+     * ShiroFilter<br/>
+     * 注意这里参数中的 StudentService 和 IScoreDao 只是一个例子，因为我们在这里可以用这样的方式获取到相关访问数据库的对象，
+     * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。实际项目中，请使用自己的Service来处理业务逻辑。
+     *
+     * @return
+     */
+    @Bean(name = "shiroFilter")
+    public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
+
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new MShiroFilterFactoryBean();
+
+        // 必须设置 SecurityManager
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+
+        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        shiroFilterFactoryBean.setLoginUrl("/login");
+
+        // 登录成功后要跳转的连接
+        shiroFilterFactoryBean.setSuccessUrl("/main");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/404");
+
+        loadShiroFilterChain(shiroFilterFactoryBean);
+        return shiroFilterFactoryBean;
+    }
+
+    /**
      * 加载shiroFilter权限控制规则（从数据库读取然后配置, 可在参数内加Service来进行查询）
      *
      */
@@ -115,32 +141,5 @@ public class ShiroConfiguration {
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
-
-    /**
-     * ShiroFilter<br/>
-     * 注意这里参数中的 StudentService 和 IScoreDao 只是一个例子，因为我们在这里可以用这样的方式获取到相关访问数据库的对象，
-     * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。实际项目中，请使用自己的Service来处理业务逻辑。
-     *
-     * @return
-     */
-    @Bean(name = "shiroFilter")
-    public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
-
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new MShiroFilterFactoryBean();
-
-        // 必须设置 SecurityManager
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("/login");
-
-        // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/main");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
-
-        loadShiroFilterChain(shiroFilterFactoryBean);
-        return shiroFilterFactoryBean;
-    }
-
 
 }
