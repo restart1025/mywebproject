@@ -10,6 +10,7 @@ public class UploadFile extends BaseEntity {
     private String filePath;//文件的下载路径
     private Person uploader;//文件的上传人
     private LocalDateTime uploadTime;//上传时间
+    private String fileSize;//文件大小
 
     public String getFileSn() {
         return fileSn;
@@ -57,5 +58,13 @@ public class UploadFile extends BaseEntity {
 
     public void setUploadTime(LocalDateTime uploadTime) {
         this.uploadTime = uploadTime;
+    }
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
     }
 }

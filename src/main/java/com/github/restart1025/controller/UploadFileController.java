@@ -77,30 +77,7 @@ public class UploadFileController {
      */
     @RequestMapping(value = "/deleteFile", method = RequestMethod.POST)
     public JSONObject deleteFile(@RequestBody Map<String, Object> map) {
-        JSONObject jo = new JSONObject();
-        jo.put("result", false);
-        try {
-            if(MapUtils.getString(map, "fileSn") != null)
-            {
-                String personId = (String) SecurityUtils.getSubject().getPrincipal();
-                if(personId != null)
-                {
-                    if(personId.equals(MapUtils.getString(map, "uploader")))
-                    {
-                        map.put("personId", personId);
-                        uploadFileSerivce.deleteFile(map);
-                        jo.put("result", true);
-                    } else {
-                        jo.put("msg", "只能删除自己上传的文件!");
-                    }
-                } else {
-                    jo.put("msg", "登录超时, 请重新登录!");
-                }
-            }
-        } catch (Exception e) {
-            jo.put("msg", "程序异常, 请刷新页面后重试!");
-        }
-        return jo;
+        return uploadFileSerivce.deleteFile(map);
     }
     /**
      * 文件下载
@@ -110,56 +87,13 @@ public class UploadFileController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public void testDownload(HttpServletResponse res, String filePath,
+    public void fileDownload(HttpServletResponse res, String filePath,
                              String fileName) throws UnsupportedEncodingException {
 
         logger.info("filePath : " + filePath);
         logger.info("fileName : " + fileName);
 
-        fileName = URLEncoder.encode(fileName + this.getFileExtByFileName(filePath),"UTF-8");
-
-        logger.info("fileName after : " + fileName);
-        //设置响应头和客户端保存文件名
-        res.setCharacterEncoding("utf-8");
-        res.setHeader("content-type", "application/octet-stream");
-        res.setContentType("application/octet-stream");
-        res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-        byte[] buff = new byte[1024];
-        InputStream bis = null;
-        OutputStream os;
-        try {
-            os = res.getOutputStream();
-//            bis = new BufferedInputStream(new FileInputStream(new File("D:\\testLog\\"
-//                    + fileName)));
-            bis = QiNiuYun.download(filePath);
-            if( bis != null )
-            {
-                int i = bis.read(buff);
-                while (i != -1) {
-                    os.write(buff, 0, buff.length);
-                    os.flush();
-                    i = bis.read(buff);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        uploadFileSerivce.fileDownload(res, filePath, fileName);
     }
 
-    /**
-     * 根据文件名获取文件后缀
-     * @param fileName 文件名
-     * @return
-     */
-    private String getFileExtByFileName(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("."), fileName.length());
-    }
 }

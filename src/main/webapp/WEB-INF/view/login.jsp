@@ -47,7 +47,7 @@
 <!-- BEGIN LOGIN -->
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" action="loginForm" method="post" commandName="user">
+    <form class="login-form" action="loginForm.action" method="post" commandName="user">
         <h3 class="form-title">输入账号登录</h3>
         <div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
@@ -94,7 +94,7 @@
     <!-- END LOGIN FORM -->
 
     <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="#" method="post">
+    <form class="forget-form" action="findPassword.action" method="post">
         <h3>忘记密码 ?</h3>
         <p>
             请输入你的邮箱来找回密码.
@@ -116,7 +116,7 @@
     <!-- END FORGOT PASSWORD FORM -->
 
     <!-- BEGIN REGISTRATION FORM -->
-    <form class="register-form" action="#" method="post">
+    <form class="register-form" action="register.action" method="post">
         <h3>注册</h3>
         <p>
             请在下方填写个人信息:
@@ -125,7 +125,7 @@
             <label class="control-label visible-ie8 visible-ie9">姓名</label>
             <div class="input-icon">
                 <i class="fa fa-font"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="请输入姓名" name="fullname"/>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="请输入姓名" name="username"/>
             </div>
         </div>
         <div class="form-group">
@@ -133,7 +133,7 @@
             <label class="control-label visible-ie8 visible-ie9">邮箱</label>
             <div class="input-icon">
                 <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="请输入邮箱" name="email"/>
+                <input id="register-email-btn" class="form-control placeholder-no-fix" type="text" placeholder="请输入邮箱" name="mailBox"/>
             </div>
         </div>
         <div class="form-group">
@@ -152,8 +152,9 @@
         </div>
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">国家</label>
-            <select name="country" id="select2_sample4" class="select2 form-control">
+            <select id="select2_sample4" class="select2 form-control" name="country">
                 <option value=""></option>
+                <option value="CN">China</option>
                 <option value="AF">Afghanistan</option>
                 <option value="AL">Albania</option>
                 <option value="DZ">Algeria</option>
@@ -196,7 +197,6 @@
                 <option value="CF">Central African Republic</option>
                 <option value="TD">Chad</option>
                 <option value="CL">Chile</option>
-                <option value="CN">China</option>
                 <option value="CX">Christmas Island</option>
                 <option value="CC">Cocos (Keeling) Islands</option>
                 <option value="CO">Colombia</option>
@@ -419,7 +419,7 @@
         </div>
         <div class="form-group">
             <label>
-                <input type="checkbox" name="tnc"/> 我同意 <a href="#">注册协议</a> 和 <a href="#">隐私政策</a>
+                <input id="register-agree-btn" type="checkbox" name="tnc"/> 我同意 <a href="#">注册协议</a> 和 <a href="#">隐私政策</a>
             </label>
             <div id="register_tnc_error">
             </div>
@@ -427,7 +427,7 @@
         <div class="form-actions">
             <button id="register-back-btn" type="button" class="btn">
                 <i class="m-icon-swapleft"></i> 返回 </button>
-            <button type="submit" id="register-submit-btn" class="btn blue pull-right">
+            <button type="submit" id="register-submit-btn" class="btn pull-right disabled">
                 注册 <i class="m-icon-swapright m-icon-white"></i>
             </button>
         </div>
@@ -439,7 +439,7 @@
 
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2017 &copy; Metronic.
+    2017 &copy; www.restart1025.com.
 </div>
 <!-- END COPYRIGHT -->
 
@@ -476,6 +476,47 @@
     jQuery(document).ready(function() {
         App.init();
         Login.init();
+    });
+    //初始化页面时验证是否记住了密码
+    $(document).ready(function() {
+        if(window.top.$("#page-wrapper").length > 0){
+            window.top.location.href="${pageContext.request.contextPath}/login";
+        }
+//        if (window.history && window.history.pushState) {
+//            $(window).on('popstate', function () {
+//                window.history.pushState('forward', null, '#');
+//                window.history.forward(1);
+//            });
+//        }
+//        window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+//        window.history.forward(1);
+    });
+    $(function(){
+        /**
+         * 点击同意协议按钮触发事件
+         */
+        $('#register-agree-btn').click(function(){
+            if ($('#register-agree-btn').attr('checked'))
+            {
+                $('#register-submit-btn').addClass('blue').removeClass('disabled');
+            } else {
+                if(!$('#register-submit-btn').hasClass('disabled'))
+                {
+                    $('#register-submit-btn').removeClass('blue').addClass('disabled');
+                }
+            }
+        });
+        /**
+         * 邮箱输入框失去焦点( 已验证 )
+         */
+//        var pattern = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+//        $("#register-email-btn").blur(function(){
+//            if(pattern.test($(this).val())){
+//                alert("email合法");
+//            }else{
+//                alert("请输入正确的email地址");
+//            }
+//        });
     });
 </script>
 <!-- END JAVASCRIPTS -->

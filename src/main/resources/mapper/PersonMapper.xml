@@ -30,4 +30,9 @@
         WHERE r.role_sn = #{roleSn} AND p.deleted=0
     </select>
 
+    <insert id="personAdd" parameterType="person">
+        INSERT INTO person(person_id, username, password, mail_box, address, city, country)
+        VALUES (#{personId}, #{username}, #{password}, #{mailBox}, #{address}, #{city}, #{country})
+    </insert>
+
 </mapper>

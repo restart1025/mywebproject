@@ -136,6 +136,8 @@ public class ShiroConfiguration {
 
         filterChainDefinitionMap.put("/login", "anon");//anon 可以理解为不拦截
         filterChainDefinitionMap.put("/loginForm", "anon");
+        filterChainDefinitionMap.put("/register", "anon");
+        filterChainDefinitionMap.put("/findPassword", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");//所有的都拦截
 

@@ -29,4 +29,9 @@ public class PersonServiceImpl implements PersonService {
     public List<Person> getPersonByRoleSn(Map<String, Object> map) {
         return personDao.getPersonByRoleSn(map);
     }
+
+    @Override
+    public void personAdd(Person person) {
+        personDao.personAdd(person);
+    }
 }

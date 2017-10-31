@@ -5,12 +5,13 @@
 
     <resultMap id="uploadFileMap" type="uploadFile">
         <id property="id" column="id" />
-        <result property="fileSn" column="file_sn" />
-        <result property="fileName" column="file_name" />
-        <result property="fileType" column="file_type" />
-        <result property="filePath" column="file_path" />
-        <result property="uploadTime" column="upload_time" />
-        <result property="deleted" column="deleted" />
+        <result property="fileSn" column="file_sn"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileType" column="file_type"/>
+        <result property="filePath" column="file_path"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="deleted" column="deleted"/>
         <collection property="uploader" fetchType="lazy" select="com.github.restart1025.dao.PersonDao.getPersonByPersonId"
                     column="{personId=person_id}" />
     </resultMap>
@@ -34,8 +35,8 @@
     </select>
 
     <insert id="insertUploadFile" parameterType="map">
-        INSERT INTO upload_file(file_sn, file_name, file_type, file_path, person_id, upload_time)
-        VALUES (#{fileSn}, #{fileName}, #{fileType}, #{filePath},  #{uploader}, #{uploadTime})
+        INSERT INTO upload_file(file_sn, file_name, file_type, file_path, person_id, upload_time, file_size)
+        VALUES (#{fileSn}, #{fileName}, #{fileType}, #{filePath},  #{uploader}, #{uploadTime}, #{fileSize})
     </insert>
 
 </mapper>

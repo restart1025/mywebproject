@@ -23,13 +23,20 @@
     <!-- Latest compiled and minified Locales -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
 
+    <!-- sweetalert弹出框的js样式 -->
+    <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <!-- sweetalert弹出框的css样式 -->
+    <link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+
+    <%--<link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">--%>
+
     <script type="text/javascript">
         $(function(){
             $('#table').bootstrapTable({
                 url:"${pageContext.request.contextPath}/uploadData/showData.action",
                 method:'post',
 //                contentType:'application/json',
-                idField:'fileSn',
+                idField:'id',
                 uniqueId:'fileSn',
 //                queryParams:function(params) {
 //                    params['personId']='restart1025';
@@ -67,6 +74,9 @@
                     field: 'fileType',
                     title: '文件类型'
                 }, {
+                    field: 'fileSize',
+                    title: '文件大小'
+                }, {
                     field: 'uploader',
                     title: '上传人'
                 }, {
@@ -74,7 +84,7 @@
                     title: '上传时间'
                 }, {
                     field: 'deleted',
-                    title: '上传时间',
+                    title: '操作',
                     align: 'center',
                     formatter: function(value, row) {
                         return "<a onclick=deleteFileFun('" + row.fileSn + "','" + row.uploader + "')>删除</a>";
@@ -109,16 +119,34 @@
          * @param event
          */
         function deleteFileFun(fileSn, uploader) {
-            $.ajax({
-                url:'${pageContext.request.contextPath}/uploadData/deleteFile.action',
-                type:'post',
-                data:{fileSn:fileSn, uploader:uploader},
-                dataType:'json',
-                success: function(data){
-                    console.log(data);
-                    $('#table').bootstrapTable('refresh');
-                }
-            },"json");
+
+            swal({
+                title: "系统提示",
+                text: "你确定要删除该文件吗？删除后不可恢复",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            },
+            function(){
+                $.ajax({
+                    url:'${pageContext.request.contextPath}/uploadData/deleteFile.action',
+                    type:'post',
+                    contentType:'application/json',
+                    data:JSON.stringify({fileSn:fileSn, uploader:uploader}),
+                    dataType:'json',
+                    success: function(data){
+//                        console.log(data);
+                        if(data.result)
+                        {
+                            swal("系统提示", "删除文件成功!", "success")
+                        } else {
+                            swal("系统提示", "删除文件失败!" + data.msg, "error")
+                        }
+                        $('#table').bootstrapTable('refresh');
+                    }
+                },"json");
+            });
         };
     </script>
 </head>

@@ -18,58 +18,99 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 
+/**
+ *
+ * 七牛云存储所对应的文件上传下载配置
+ *
+ * ACCESS_KEY、SECRET_KEY : 对应凭证
+ *
+ * auth : 凭证所生成的秘钥
+ *
+ * Bucket : 上传到对应的空间名称
+ *
+ * DOWNLOAD : 对应空间所对应的文件下载地址
+ *
+ * key : 服务器上的文件名
+ *
+ */
 public class QiNiuYun {
 
     private static Logger logger = LoggerFactory.getLogger(QiNiuYun.class);
 
-    //设置好账号的ACCESS_KEY和SECRET_KEY
-    private static String ACCESS_KEY = "EJ86DHmrwk44B7QDMmSsf9DiPAWpiT-VUf8EUvFM";
-    private static String SECRET_KEY = "dSUqBlmtvB0-i2sgD3pNI2j_8BLPCow3pmBetvEz";
-
-    //要上传的空间
-    public static String IMAGE = "images";
-    public static String FILE = "file";
-
-    //对应下载地址
-    public static String IMAGEDOWNLOAD = "http://image.restart1025.com/";
-    public static String FILEDOWNLOAD = "http://file.restart1025.com/";
-
-    //上传到七牛后保存的文件名
-    //String key = UUID.randomUUID().toString();
-    //上传文件的路径
-    //String FilePath = "D:\\restart1025\\log\\spring.log";
-
-    //密钥配置
-    private static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-
-    ///////////////////////指定上传的Zone的信息//////////////////
-    //第二种方式: 自动识别要上传的空间(bucket)的存储区域是华东、华北、华南。
-    private static Zone z = Zone.autoZone();
-    private static Configuration c = new Configuration(z);
-
-    //创建上传对象
-    private static UploadManager uploadManager = new UploadManager(c);
+    /**************机密配置, 需用文件来传输************/
+    /**
+     * ACCESS_KEY
+     */
+    private final static String ACCESS_KEY = "EJ86DHmrwk44B7QDMmSsf9DiPAWpiT-VUf8EUvFM";
+    /**
+     * SECRET_KEY
+     */
+    private final static String SECRET_KEY = "dSUqBlmtvB0-i2sgD3pNI2j_8BLPCow3pmBetvEz";
+    /**
+     * 密钥配置
+     */
+    private final static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 
 
-    //简单上传，使用默认策略，只需要设置上传的空间名就可以了
-    private static String getUpToken(String bucketname) {
-        return QiNiuYun.auth.uploadToken(bucketname);
+    /*************上传空间和下载路径配置************/
+    /**
+     * 图片空间Bucket
+     */
+    public final static String IMAGE = "image";
+    /**
+     * 文件空间Bucket
+     */
+    public final static String FILE = "file";
+
+    public final static String VIDEO = "video";
+
+
+    /**
+     * 图片空间所对应的下载地址
+     */
+    //public final static String IMAGEDOWNLOAD = getDownLoadAddressByBucket(QiNiuYun.IMAGE);
+    /**
+     * 文件空间所对应的下载地址
+     */
+    //public final static String FILEDOWNLOAD = getDownLoadAddressByBucket(QiNiuYun.FILE);
+
+
+    /*****************指定上传的地址Zone的信息****************/
+    /**
+     * 自动识别要上传的空间(bucket)的存储区域是华东、华北、华南
+     */
+    private final static Zone z = Zone.autoZone();
+    private final static Configuration c = new Configuration(z);
+
+    /**
+     * 创建上传对象
+     */
+    private final static UploadManager uploadManager = new UploadManager(c);
+
+    /**
+     * 简单上传, 使用默认策略, 只需要设置上传的空间名就可以了
+     * @param bucketName 服务器所对应的空间名
+     * @return
+     */
+    private static String getUpToken(String bucketName) {
+        return QiNiuYun.auth.uploadToken(bucketName);
     }
 
     /**
      * 文件上传
-     * @param file
-     * @param bucketname
-     * @return
+     * @param file 上传的文件
+     * @param bucketName 上传文件所对应的服务器空间
+     * @return 上传后服务器上的文件名
      * @throws IOException
      */
-    public static String upload(File file, String bucketname) throws IOException {
+    public static String upload(File file, String bucketName) throws IOException {
         if( file != null && file.exists() )
         {
             try {
+                //创建新文件名
                 String newFileName = newFileName(file.getName());
                 //调用put方法上传
-                Response res = uploadManager.put(file, newFileName, getUpToken(bucketname));
+                Response res = uploadManager.put(file, newFileName, getUpToken(bucketName));
                 //打印返回的信息
                 logger.info("uploadFile " + file.getName() + ", return msg : " + res.bodyString());
                 return newFileName;
@@ -84,7 +125,12 @@ public class QiNiuYun {
         return null;
     }
 
-    // 文件下载
+    /**
+     * 文件下载
+     * @param URL 文件的下载全地址
+     * @return 文件流
+     * @throws IOException
+     */
     public static InputStream download(String URL) throws IOException {
         InputStream inputStream = null;
         String downloadURL = null;
@@ -108,20 +154,95 @@ public class QiNiuYun {
         return inputStream;
     }
 
-    //通过文件名获取扩展名
-    public static String getFileExt(String filename){
-        return FilenameUtils.getExtension(filename);
+    /**
+     * 通过文件名获取扩展名
+     * @param fileName 文件名
+     * @return
+     */
+    public static String getFileExtNoPoint(String fileName){
+        return FilenameUtils.getExtension(fileName);
     }
 
-    //通过文件名获取没有扩展名的文件名
-    public static String getFileName(String filename){
-        return filename.replace("."+getFileExt(filename), "");
+    /**
+     * 通过文件名获取没有扩展名的文件名
+     * @param fileName 文件名
+     * @return
+     */
+    public static String getFileNameNoPointExt(String fileName){
+        return fileName.replace("." + getFileExtNoPoint(fileName), "");
     }
 
-    //生成UUID随机数，作为新的文件名
-    private static String newFileName(String filename){
-        String ext=getFileExt(filename);
+    /**
+     * 生成UUID随机数, 作为新的文件名
+     * @param fileName 文件名
+     * @return
+     */
+    private static String newFileName(String fileName){
+        String ext = getFileExtNoPoint(fileName);
         return UUID.randomUUID().toString().replaceAll("-", "")+"."+ext;
+    }
+
+    /**
+     * 根据空间Bucket来获取下载地址
+     * @param bucket
+     * @return
+     */
+    public static String getDownLoadAddressByBucket(String bucket) {
+        StringBuffer stringBuffer = new StringBuffer("http://");
+        stringBuffer.append(bucket);
+        stringBuffer.append(".restart1025.com/");
+        return stringBuffer.toString();
+    }
+
+    /**
+     * 根据文件名称获取要上传的空间Bucket
+     * @param fileName
+     * @return
+     */
+    public static String getBucketByFileName(String fileName) {
+        //判断文件类型
+        String ext = getFileExtNoPoint(fileName);
+        //BMP、JPG、JPEG、PNG、GIF
+        String bucket="";
+        switch(ext.toLowerCase()){
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "gif":
+            case "bmp":
+            case "pcx":
+            case "tiff":
+            case "tga":
+            case "exif":
+            case "fpx":
+            case "svg":
+            case "psd":
+            case "cdr":
+            case "pcd":
+            case "dxf":
+            case "ufo":
+            case "eps":
+            case "ai":
+            case "hdri":
+            case "raw":
+                bucket = QiNiuYun.IMAGE;
+                break;
+            case "mp4":
+            case "avi":
+            case "rmvb":
+            case "rm":
+            case "asf":
+            case "divx":
+            case "mpg":
+            case "mpeg":
+            case "mpe":
+            case "wmv":
+            case "vob":
+                bucket = QiNiuYun.VIDEO;
+                break;
+            default: bucket = QiNiuYun.FILE;
+        }
+        return bucket;
     }
 
 }

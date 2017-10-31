@@ -25,4 +25,10 @@ public interface PersonService {
      * @return
      */
     List<Person> getPersonByRoleSn(Map<String, Object> map);
+
+    /**
+     * 新增人员信息
+     * @param person
+     */
+    void personAdd(Person person);
 }

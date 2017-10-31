@@ -1,8 +1,8 @@
 package com.github.restart1025.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.entity.Role;
 
-import java.util.List;
 import java.util.Map;
 
 public interface RoleService {
@@ -18,5 +18,5 @@ public interface RoleService {
      * @param map key:personId
      * @return
      */
-    List<Role> getRoleByPersonId(Map<String, String> map);
+    JSONObject getRoleByPersonId(Map<String, Object> map);
 }

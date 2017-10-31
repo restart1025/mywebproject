@@ -18,5 +18,5 @@ public interface RoleDao {
      * @param map key:personId
      * @return
      */
-    List<Role> getRoleByPersonId(Map<String, String> map);
+    List<Role> getRoleByPersonId(Map<String, Object> map);
 }

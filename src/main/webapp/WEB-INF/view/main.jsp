@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,21 +66,27 @@
                         <span class="nav-label">文件展示</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="fa fa-desktop"></i>
-                        <span class="nav-label">权限管理</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a class="J_menuItem" href="resource/role">角色管理</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="resource/permission">权限管理</a>
-                        </li>
-                    </ul>
-                </li>
+                <shiro:hasPermission name="resourceManage">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-desktop"></i>
+                            <span class="nav-label">权限管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <shiro:hasPermission name="rolePage">
+                                <li>
+                                    <a class="J_menuItem" href="resource/role">角色管理</a>
+                                </li>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="permissionPage">
+                                <li>
+                                    <a class="J_menuItem" href="resource/permission">资源项</a>
+                                </li>
+                            </shiro:hasPermission>
+                        </ul>
+                    </li>
+                </shiro:hasPermission>
             </ul>
         </div>
     </nav>

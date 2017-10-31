@@ -19,10 +19,10 @@ var Login = function () {
 
 	            messages: {
 	                username: {
-	                    required: "Username is required."
+	                    required: "请输入用户名."
 	                },
 	                password: {
-	                    required: "Password is required."
+	                    required: "请输入密码."
 	                }
 	            },
 
@@ -74,7 +74,7 @@ var Login = function () {
 
 	            messages: {
 	                email: {
-	                    required: "Email is required."
+	                    required: "请输入邮箱."
 	                }
 	            },
 
@@ -131,7 +131,7 @@ var Login = function () {
 
 
 		$("#select2_sample4").select2({
-		  	placeholder: '<i class="fa fa-map-marker"></i>&nbsp;Select a Country',
+		  	placeholder: '<i class="fa fa-map-marker"></i>&nbsp;请选择一个国家',
             allowClear: true,
             formatResult: format,
             formatSelection: format,
