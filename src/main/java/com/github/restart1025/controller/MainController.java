@@ -38,6 +38,7 @@ public class MainController {
         return "login";
     }
 
+
     /**
      * JSP页面请求
      * @param forName
@@ -46,80 +47,6 @@ public class MainController {
     @RequestMapping("/{forName}")
     public String jspForword(@PathVariable String forName) {
         return forName;
-    }
-
-    /**
-     * 登录验证
-     * @param person
-     * @param bindingResult
-     * @param redirectAttributes
-     * @return
-     */
-    @RequestMapping(value="/loginForm", method=RequestMethod.POST)
-    public String login(@Valid Person person, BindingResult bindingResult,
-                        RedirectAttributes redirectAttributes){
-
-        if( bindingResult.hasErrors() )
-            return "login";
-
-        String personId = person.getPersonId();
-        UsernamePasswordToken token = new UsernamePasswordToken(person.getPersonId(), person.getPassword());
-
-        //获取当前的Subject
-        Subject currentUser = SecurityUtils.getSubject();
-
-        try {
-            //在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
-            //每个Realm都能在必要时对提交的AuthenticationTokens作出反应
-            //所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
-            logger.info("对用户[" + personId + "]进行登录验证..验证开始");
-            currentUser.login(token);
-            logger.info("对用户[" + personId + "]进行登录验证..验证通过");
-        } catch (UnknownAccountException uae) {
-            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,未知账户");
-            redirectAttributes.addFlashAttribute("message", "未知账户");
-        } catch (IncorrectCredentialsException ice) {
-            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,错误的凭证");
-            redirectAttributes.addFlashAttribute("message", "密码不正确");
-        } catch (LockedAccountException lae) {
-            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,账户已锁定");
-            redirectAttributes.addFlashAttribute("message", "账户已锁定");
-        } catch (ExcessiveAttemptsException eae) {
-            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,错误次数过多");
-            redirectAttributes.addFlashAttribute("message", "用户名或密码错误次数过多");
-        } catch (AuthenticationException ae) {
-            //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
-            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,堆栈轨迹如下");
-            ae.printStackTrace();
-            redirectAttributes.addFlashAttribute("message", "用户名或密码不正确");
-        }
-
-        //验证是否登录成功
-        if(currentUser.isAuthenticated())
-        {
-            logger.info("用户[" + personId + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
-            return "redirect:/main";
-        }else{
-            token.clear();
-            return "redirect:/login";
-        }
-    }
-
-
-    /**
-     * 注册请求
-     * @param person
-     * @return
-     */
-    @RequestMapping(value="/register", method=RequestMethod.POST)
-    public String register(@Valid Person person) {
-        String result = "login";
-        try {
-            personService.personAdd(person);
-        } catch (Exception e) {
-            result = "error/registerError";
-        }
-        return result;
     }
 
     /**
@@ -199,9 +126,84 @@ public class MainController {
      * 注册失败
      * @return
      */
-    @RequestMapping("error/registerError")
+    @RequestMapping("/error/registerError")
     public String registerError() {
         return "error/registerError";
+    }
+
+
+    /**
+     * 登录验证
+     * @param person
+     * @param bindingResult
+     * @param redirectAttributes
+     * @return
+     */
+    @RequestMapping(value="/loginForm", method=RequestMethod.POST)
+    public String login(@Valid Person person, BindingResult bindingResult,
+                        RedirectAttributes redirectAttributes){
+
+        if( bindingResult.hasErrors() )
+            return "login";
+
+        String personId = person.getPersonId();
+        UsernamePasswordToken token = new UsernamePasswordToken(person.getPersonId(), person.getPassword());
+
+        //获取当前的Subject
+        Subject currentUser = SecurityUtils.getSubject();
+
+        try {
+            //在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
+            //每个Realm都能在必要时对提交的AuthenticationTokens作出反应
+            //所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
+            logger.info("对用户[" + personId + "]进行登录验证..验证开始");
+            currentUser.login(token);
+            logger.info("对用户[" + personId + "]进行登录验证..验证通过");
+        } catch (UnknownAccountException uae) {
+            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,未知账户");
+            redirectAttributes.addFlashAttribute("message", "未知账户");
+        } catch (IncorrectCredentialsException ice) {
+            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,错误的凭证");
+            redirectAttributes.addFlashAttribute("message", "密码不正确");
+        } catch (LockedAccountException lae) {
+            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,账户已锁定");
+            redirectAttributes.addFlashAttribute("message", "账户已锁定");
+        } catch (ExcessiveAttemptsException eae) {
+            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,错误次数过多");
+            redirectAttributes.addFlashAttribute("message", "用户名或密码错误次数过多");
+        } catch (AuthenticationException ae) {
+            //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
+            logger.info("对用户[" + personId + "]进行登录验证..验证未通过,堆栈轨迹如下");
+            ae.printStackTrace();
+            redirectAttributes.addFlashAttribute("message", "用户名或密码不正确");
+        }
+
+        //验证是否登录成功
+        if(currentUser.isAuthenticated())
+        {
+            logger.info("用户[" + personId + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
+            return "redirect:/main";
+        }else{
+            token.clear();
+            return "redirect:/login";
+        }
+    }
+
+
+    /**
+     * 注册请求
+     * @param person
+     * @return
+     */
+    @RequestMapping(value="/register", method=RequestMethod.POST)
+    public String register(@Valid Person person) {
+        String result = "register/registerSuccess";
+        try {
+            personService.personAdd(person);
+        } catch (Exception e) {
+            result = "register/registerError";
+        }
+        return result;
     }
 
 }

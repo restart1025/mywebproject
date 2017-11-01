@@ -47,13 +47,11 @@
 <!-- BEGIN LOGIN -->
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" action="loginForm.action" method="post" commandName="user">
+    <form class="login-form" action="loginForm" method="post" commandName="user">
         <h3 class="form-title">输入账号登录</h3>
         <div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
-            <span>
-						 请输入账号密码
-					</span>
+            <span>请输入账号密码</span>
         </div>
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
@@ -94,7 +92,7 @@
     <!-- END LOGIN FORM -->
 
     <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="findPassword.action" method="post">
+    <form class="forget-form" action="findPassword" method="post">
         <h3>忘记密码 ?</h3>
         <p>
             请输入你的邮箱来找回密码.
@@ -116,7 +114,7 @@
     <!-- END FORGOT PASSWORD FORM -->
 
     <!-- BEGIN REGISTRATION FORM -->
-    <form class="register-form" action="register.action" method="post">
+    <form class="register-form" action="register" method="post">
         <h3>注册</h3>
         <p>
             请在下方填写个人信息:

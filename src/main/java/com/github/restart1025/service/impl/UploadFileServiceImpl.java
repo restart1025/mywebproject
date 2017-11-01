@@ -188,9 +188,8 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
         OutputStream os;
         try {
             os = res.getOutputStream();
-//            bis = new BufferedInputStream(new FileInputStream(new File("D:\\testLog\\"
-//                    + fileName)));
-            bis = QiNiuYun.download(filePath);
+            bis = new BufferedInputStream(new FileInputStream(QiNiuYun.downloadReturnFile(filePath)));
+//            bis = QiNiuYun.download(filePath);
             if( bis != null )
             {
                 int i = bis.read(buff);

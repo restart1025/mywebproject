@@ -6,6 +6,7 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,6 +153,28 @@ public class QiNiuYun {
             logger.error("downLoad file error msg : " + e.toString());
         }
         return inputStream;
+    }
+
+    /**
+     * 文件下载
+     * @param URL 文件的下载全地址
+     * @return 文件File
+     */
+    public static File downloadReturnFile(String URL) {
+        String downloadURL = null;
+        try{
+            //调用privateDownloadUrl方法生成下载链接,第二个参数可以设置Token的过期时间
+            downloadURL = auth.privateDownloadUrl(URL, 3600);
+
+            logger.info( "downLoad file URL : " + downloadURL);
+
+            return FileUtils.toFile(new URL(downloadURL));
+
+        } catch (Exception e) {
+            logger.error("downLoad file URL : " + downloadURL);
+            logger.error("downLoad file error msg : " + e.toString());
+        }
+        return null;
     }
 
     /**
