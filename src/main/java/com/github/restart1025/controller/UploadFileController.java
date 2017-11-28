@@ -7,6 +7,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,13 +88,13 @@ public class UploadFileController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public void fileDownload(HttpServletResponse res, String filePath,
-                             String fileName) throws UnsupportedEncodingException {
+    public ResponseEntity<byte[]> fileDownload(HttpServletResponse res, String filePath,
+                                               String fileName) throws IOException {
 
         logger.info("filePath : " + filePath);
         logger.info("fileName : " + fileName);
 
-        uploadFileSerivce.fileDownload(res, filePath, fileName);
+        return uploadFileSerivce.fileDownload(res, filePath, fileName);
     }
 
 }

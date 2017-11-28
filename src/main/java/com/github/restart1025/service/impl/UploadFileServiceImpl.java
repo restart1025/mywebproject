@@ -9,9 +9,14 @@ import com.github.restart1025.entity.UploadFile;
 import com.github.restart1025.service.UploadFileSerivce;
 import com.github.restart1025.util.QiNiuYun;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -156,10 +161,10 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
                     result.put("errorMsg", "上传出错");
                     break;
                 } finally {
-//                    if(saveFile.exists())
-//                    {
-//                        saveFile.delete();
-//                    }
+                    if(saveFile.exists())
+                    {
+                        saveFile.delete();
+                    }
                 }
             } else {
                 logger.debug("You failed to upload " + file.getName() + " because the file was empty.");
@@ -173,43 +178,54 @@ public class UploadFileServiceImpl implements UploadFileSerivce {
     }
 
     @Override
-    public void fileDownload(HttpServletResponse res, String filePath,
-                             String fileName) throws UnsupportedEncodingException {
+    public ResponseEntity<byte[]> fileDownload(HttpServletResponse res, String filePath,
+                             String fileName) throws IOException {
+
         fileName = URLEncoder.encode(fileName + this.getFileExtByFileName(filePath),"UTF-8");
 
         logger.info("fileName after : " + fileName);
+
+        String dfileName = new String(fileName.getBytes("UTF-8"), "UTF-8");
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        headers.setContentDispositionFormData("attachment", dfileName);
+
+        return new ResponseEntity<byte[]>(QiNiuYun.downloadReturnByteArray(filePath), headers, HttpStatus.CREATED);
+
         //设置响应头和客户端保存文件名
-        res.setCharacterEncoding("utf-8");
-        res.setHeader("content-type", "application/octet-stream");
-        res.setContentType("application/octet-stream");
-        res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-        byte[] buff = new byte[1024];
-        InputStream bis = null;
-        OutputStream os;
-        try {
-            os = res.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(QiNiuYun.downloadReturnFile(filePath)));
-//            bis = QiNiuYun.download(filePath);
-            if( bis != null )
-            {
-                int i = bis.read(buff);
-                while (i != -1) {
-                    os.write(buff, 0, buff.length);
-                    os.flush();
-                    i = bis.read(buff);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        res.setCharacterEncoding("utf-8");
+//        res.setHeader("content-type", "application/octet-stream");
+//        res.setContentType("application/octet-stream");
+//        res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+//        byte[] buff = new byte[1024];
+//        InputStream bis = null;
+//        OutputStream os;
+//        try {
+//            os = res.getOutputStream();
+//            bis = new BufferedInputStream(new FileInputStream(QiNiuYun.downloadReturnFile(filePath)));
+//            if( bis != null )
+//            {
+//                int i = bis.read(buff);
+//                while (i != -1) {
+//                    os.write(buff, 0, buff.length);
+//                    os.flush();
+//                    i = bis.read(buff);
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (bis != null) {
+//                try {
+//                    bis.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     /**

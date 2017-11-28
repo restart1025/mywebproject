@@ -2,9 +2,11 @@ package com.github.restart1025.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.restart1025.entity.UploadFile;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +53,6 @@ public interface UploadFileSerivce {
      * @param filePath 文件下载地址
      * @param fileName 文件下载到本地的名字
      */
-    void fileDownload(HttpServletResponse res, String filePath,
-                             String fileName) throws UnsupportedEncodingException;
+    ResponseEntity<byte[]> fileDownload(HttpServletResponse res, String filePath,
+                                        String fileName) throws IOException;
 }
